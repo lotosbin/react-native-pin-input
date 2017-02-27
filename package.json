@@ -9,6 +9,7 @@
   "author": "lotosbin <lotosbin@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
+    "immutable": "^3.8.1",
     "react": "^15.4.2",
     "react-native": "^0.41.2"
   }
