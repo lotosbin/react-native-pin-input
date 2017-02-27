@@ -1,0 +1,15 @@
+{
+  "name": "react-native-pin-input",
+  "version": "1.0.0",
+  "description": "react native pin input",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lotosbin <lotosbin@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^15.4.2",
+    "react-native": "^0.41.2"
+  }
+}
