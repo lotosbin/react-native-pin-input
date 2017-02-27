@@ -4,7 +4,7 @@
   "description": "react native pin input",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose"
   },
   "author": "lotosbin <lotosbin@gmail.com>",
   "license": "MIT",
@@ -12,5 +12,8 @@
     "immutable": "^3.8.1",
     "react": "^15.4.2",
     "react-native": "^0.41.2"
+  },
+  "devDependencies": {
+    "jest-cli": "^19.0.2"
   }
 }
