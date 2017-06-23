@@ -1,9 +1,10 @@
 # react-native-pin-input
 
 [![Join the chat at https://gitter.im/lotosbin/react-native-pin-input](https://badges.gitter.im/lotosbin/react-native-pin-input.svg)](https://gitter.im/lotosbin/react-native-pin-input?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-react native pin input
 
 [![Build Status](https://travis-ci.org/lotosbin/react-native-pin-input.svg?branch=master)](https://travis-ci.org/lotosbin/react-native-pin-input)
+
+react native pin input
 
 # sample
 https://github.com/lotosbin/react-native-pin-input-sample
