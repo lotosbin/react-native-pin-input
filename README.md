@@ -5,3 +5,12 @@ react native pin input
 
 # sample
 https://github.com/lotosbin/react-native-pin-input-sample
+
+# Installation
+```
+npm install --save react-native-pin-input
+```
+or
+```
+yarn add react-native-pin-input
+```
