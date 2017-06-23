@@ -1,10 +1,19 @@
+/**
+ * @flow
+ * */
 import React, {Component} from 'react';
 import {View, TextInput} from 'react-native';
 import Immutable from 'immutable';
+type P ={
+    keyboardType?:string
+}
+type S={
 
-export default class PinInput extends Component {
+}
+export default class PinInput extends Component<void,P,S> {
     pinItemStyle: any;
     onPinCompleted: Function;
+    pinItemProps: {};
 
     constructor(props) {
         super(props);
@@ -46,7 +55,7 @@ export default class PinInput extends Component {
                                     textAlign: 'center',
                                     ...this.props.pinItemStyle
                                 }}
-
+                                keyboardType={(this.props.pinItemProps||{}).keyboardType || 'default'}
                                 clearTextOnFocus={true}
                                 maxLength={1}
                                 onChangeText={(t) => {
