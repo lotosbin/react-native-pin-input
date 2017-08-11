@@ -19,7 +19,7 @@ export default class PinInput extends Component<void,P,S> {
         super(props);
         this.pinLength = this.props.pinLength || 4;
         this.state = {
-            pins: Array.from('_'.repeat(this.pinLength))
+            pins: Array.from((this.props.placeHolder || '_').repeat(this.pinLength))
         };
         this.pinInputItems = new Array(this.pinLength);
     }
