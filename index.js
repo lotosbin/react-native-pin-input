@@ -7,6 +7,8 @@ import Immutable from 'immutable';
 type P ={
     keyboardType?: string,
     placeHolder?: string,
+    autoFocus: boolean,
+    value?: string,
 }
 type S={
 
@@ -18,20 +20,33 @@ export default class PinInput extends Component<void,P,S> {
 
     constructor(props) {
         super(props);
+        this.props.autoFocus = props.autoFocus || true;
         this.pinLength = this.props.pinLength || 4;
         this.state = {
             pins: Array.from((this.props.placeHolder || '_').repeat(this.pinLength))
         };
+        let value = this.props.value;
+        if (value) {
+            if (value.length !== this.pinLength) {
+                throw new Error(`pin length is not equal ${this.pinLength}`)
+            }
+            this.state.pins = Array.from(value)
+        }
         this.pinInputItems = new Array(this.pinLength);
     }
 
+    componentWillReceiveProps(props) {
+        this.props.autoFocus = props.autoFocus || true;
+    }
     setPin(pin: string) {
         if (pin) {
             if (pin.length !== this.pinLength) {
                 throw new Error(`pin length is not equal ${this.pinLength}`)
             }
             this.setState({pins: Array.from(pin)});
-            this.focusPin(this.pinLength - 1)
+            if (this.props.autoFocus) {
+                this.focusPin(this.pinLength - 1)
+            }
         }
     }
 
@@ -40,9 +55,15 @@ export default class PinInput extends Component<void,P,S> {
     }
 
     clearPin() {
+        for (let i = 0; i < this.pinLength; i++) {
+            this.blurPin(i)
+        }
         let pins = Array.from((this.props.placeHolder || '_').repeat(this.pinLength));
-        this.setState({pins: Immutable.List(pins).set(0, '').toArray()});
-        this.focusPin(0)
+        this.setState({pins: Immutable.List(pins).toArray()});
+        if (this.props.autoFocus) {
+            this.setState({pins: Immutable.List(pins).set(0, '').toArray()});
+            this.focusPin(0)
+        }
     }
     onPinItemChanged(i, t) {
         this.setState({pins: Immutable.List(this.state.pins).set(i, t).toArray()}, () => {
@@ -59,6 +80,11 @@ export default class PinInput extends Component<void,P,S> {
         this.refs[`pin_${(i)}`].focus();
     }
 
+    blurPin(i) {
+        this.refs[`pin_${i}`].blur();
+    }
+
+
     render() {
         return (
             <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
@@ -68,7 +94,7 @@ export default class PinInput extends Component<void,P,S> {
                             <TextInput
                                 key={"pin_" + i}
                                 ref={`pin_${i}`}
-                                autoFocus={i === 0}
+                                autoFocus={this.props.autoFocus && i === 0}
                                 style={{
                                     padding: 2,
                                     margin: 2,
