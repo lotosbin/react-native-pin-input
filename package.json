@@ -15,5 +15,14 @@
   },
   "devDependencies": {
     "jest-cli": "^19.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lotosbin/react-native-pin-input.git"
+  },
+  "keywords": ["react-native","pin","input"],
+  "bugs": {
+    "url": "https://github.com/lotosbin/react-native-pin-input/issues"
+  },
+  "homepage": "https://github.com/lotosbin/react-native-pin-input#readme"
 }
