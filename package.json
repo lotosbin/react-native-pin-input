@@ -1,6 +1,6 @@
 {
   "name": "react-native-pin-input",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "react native pin input",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,11 @@
     "type": "git",
     "url": "git+https://github.com/lotosbin/react-native-pin-input.git"
   },
-  "keywords": ["react-native","pin","input"],
+  "keywords": [
+    "react-native",
+    "pin",
+    "input"
+  ],
   "bugs": {
     "url": "https://github.com/lotosbin/react-native-pin-input/issues"
   },
