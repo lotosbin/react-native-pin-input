@@ -105,7 +105,10 @@ export default class PinInput extends Component<void,P,S> {
                                     textAlign: 'center',
                                     ...this.props.pinItemStyle
                                 }}
+                                enablesReturnKeyAutomatically={true}
                                 keyboardType={(this.props.pinItemProps||{}).keyboardType || 'default'}
+                                returnKeyType={(this.props.pinItemProps || {}).returnKeyType || 'default'}
+                                secureTextEntry={(this.props.pinItemProps || {}).secureTextEntry || false}
                                 clearTextOnFocus={true}
                                 maxLength={1}
                                 onChangeText={(t) => {
