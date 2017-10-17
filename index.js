@@ -112,7 +112,7 @@ export default class PinInput extends Component<void,P,S> {
                                 enablesReturnKeyAutomatically={true}
                                 keyboardType={(this.props.pinItemProps||{}).keyboardType || 'default'}
                                 returnKeyType={(this.props.pinItemProps || {}).returnKeyType || 'default'}
-                                secureTextEntry={(this.props.pinItemProps || {}).secureTextEntry || false}
+                                secureTextEntry={(v !== (this.props.placeHolder || '_') && (this.props.pinItemProps || {}).secureTextEntry ) || false}
                                 // clearTextOnFocus={true}
                                 maxLength={1}
                                 onFocus={(e) => this.onPinFocus(i)}
