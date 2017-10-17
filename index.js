@@ -120,6 +120,7 @@ export default class PinInput extends Component<void,P,S> {
                                 onChangeText={async (t) => {
                                     await this.onPinItemChanged(i, t);
                                 }}
+                                onKeyPress={(e) => this.onPinKeyPress(e, i)}
                                 value={this.state.pins[i]}/>
                         )
                     })
@@ -138,6 +139,16 @@ export default class PinInput extends Component<void,P,S> {
         let placeholder = this.props.placeHolder || '_';
         if (!value && value !== placeholder) {
             await this.setState({pins: Immutable.List(this.state.pins).set(i, placeholder).toArray()})
+        }
+    }
+
+    onPinKeyPress(e, i) {
+        let key = e.nativeEvent.key;
+        if (key === 'Backspace') {
+            let pin = this.state.pins[i];
+            if (pin === '') {
+                this.focusPin(Math.max(i - 1, 0))
+            }
         }
     }
 }
