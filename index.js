@@ -65,15 +65,19 @@ export default class PinInput extends Component<void,P,S> {
             this.focusPin(0)
         }
     }
-    onPinItemChanged(i, t) {
-        this.setState({pins: Immutable.List(this.state.pins).set(i, t).toArray()}, () => {
-            if (i + 1 < this.pinLength) {
-                this.focusPin(i + 1);
-            } else {
-                //end
-                if (this.props.onPinCompleted) this.props.onPinCompleted(this.state.pins.join(''));
-            }
-        })
+
+    async onPinItemChanged(i, t) {
+        await this.setState({pins: Immutable.List(this.state.pins).set(i, t).toArray()});
+        let placeholder = this.props.placeHolder || '_';
+        if (!t || t === placeholder) {
+            return
+        }
+        if (i + 1 < this.pinLength) {
+            this.focusPin(i + 1);
+        } else {
+            //end
+            if (this.props.onPinCompleted) this.props.onPinCompleted(this.state.pins.join(''));
+        }
     }
 
     focusPin(i) {
@@ -109,10 +113,12 @@ export default class PinInput extends Component<void,P,S> {
                                 keyboardType={(this.props.pinItemProps||{}).keyboardType || 'default'}
                                 returnKeyType={(this.props.pinItemProps || {}).returnKeyType || 'default'}
                                 secureTextEntry={(this.props.pinItemProps || {}).secureTextEntry || false}
-                                clearTextOnFocus={true}
+                                // clearTextOnFocus={true}
                                 maxLength={1}
-                                onChangeText={(t) => {
-                                    this.onPinItemChanged.call(this, i, t);
+                                onFocus={(e) => this.onPinFocus(i)}
+                                onBlur={async (e) => await this.onPinBlur(e, i)}
+                                onChangeText={async (t) => {
+                                    await this.onPinItemChanged(i, t);
                                 }}
                                 value={this.state.pins[i]}/>
                         )
@@ -121,5 +127,17 @@ export default class PinInput extends Component<void,P,S> {
             </View>
         )
 
+    }
+
+    onPinFocus(i) {
+        this.setState({pins: Immutable.List(this.state.pins).set(i, '').toArray()})
+    }
+
+    async onPinBlur(e, i) {
+        let value = e.nativeEvent.text;
+        let placeholder = this.props.placeHolder || '_';
+        if (!value && value !== placeholder) {
+            await this.setState({pins: Immutable.List(this.state.pins).set(i, placeholder).toArray()})
+        }
     }
 }
