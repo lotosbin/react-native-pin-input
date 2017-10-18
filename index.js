@@ -6,7 +6,7 @@ import {View, TextInput} from 'react-native';
 import Immutable from 'immutable';
 type P ={
     keyboardType?: string,
-    placeHolder?: string,
+    placeholder?: string,
     autoFocus: boolean,
     value?: string,
 }
@@ -21,9 +21,10 @@ export default class PinInput extends Component<void,P,S> {
     constructor(props) {
         super(props);
         this.props.autoFocus = props.autoFocus || true;
+        this.props.placeholder = props.placeholder || props.placeHolder || '_';
         this.pinLength = this.props.pinLength || 4;
         this.state = {
-            pins: Array.from((this.props.placeHolder || '_').repeat(this.pinLength))
+            pins: Array.from((this.props.placeholder || '_').repeat(this.pinLength))
         };
         let value = this.props.value;
         if (value) {
@@ -58,7 +59,7 @@ export default class PinInput extends Component<void,P,S> {
         for (let i = 0; i < this.pinLength; i++) {
             this.blurPin(i)
         }
-        let pins = Array.from((this.props.placeHolder || '_').repeat(this.pinLength));
+        let pins = Array.from((this.props.placeholder || '_').repeat(this.pinLength));
         this.setState({pins: Immutable.List(pins).toArray()});
         if (this.props.autoFocus) {
             this.setState({pins: Immutable.List(pins).set(0, '').toArray()});
@@ -68,7 +69,7 @@ export default class PinInput extends Component<void,P,S> {
 
     async onPinItemChanged(i, t) {
         await this.setState({pins: Immutable.List(this.state.pins).set(i, t).toArray()});
-        let placeholder = this.props.placeHolder || '_';
+        let placeholder = this.props.placeholder || '_';
         if (!t || t === placeholder) {
             return
         }
@@ -112,7 +113,7 @@ export default class PinInput extends Component<void,P,S> {
                                 enablesReturnKeyAutomatically={true}
                                 keyboardType={(this.props.pinItemProps||{}).keyboardType || 'default'}
                                 returnKeyType={(this.props.pinItemProps || {}).returnKeyType || 'default'}
-                                secureTextEntry={(v !== (this.props.placeHolder || '_') && (this.props.pinItemProps || {}).secureTextEntry ) || false}
+                                secureTextEntry={(v !== (this.props.placeholder || '_') && (this.props.pinItemProps || {}).secureTextEntry ) || false}
                                 // clearTextOnFocus={true}
                                 maxLength={1}
                                 onFocus={(e) => this.onPinFocus(i)}
@@ -136,7 +137,7 @@ export default class PinInput extends Component<void,P,S> {
 
     async onPinBlur(e, i) {
         let value = e.nativeEvent.text;
-        let placeholder = this.props.placeHolder || '_';
+        let placeholder = this.props.placeholder || '_';
         if (!value && value !== placeholder) {
             await this.setState({pins: Immutable.List(this.state.pins).set(i, placeholder).toArray()})
         }
