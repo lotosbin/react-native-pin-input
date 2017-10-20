@@ -54,7 +54,11 @@ export default class PinInput extends Component<void,P,S> {
     }
 
     getPin(): string {
-        return this.state.pins.join('');
+        let pinText = this.state.pins.map(v => {
+            let p = this.props.placeholder || ' ';
+            return v && v !== p ? v : p;
+        }).join('');
+        return pinText;
     }
 
     clearPin() {
