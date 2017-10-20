@@ -9,6 +9,7 @@ type P ={
     placeholder?: string,
     autoFocus: boolean,
     value?: string,
+    onPinCompleted: (string, Array<string>) => void,
 }
 type S={
 
@@ -24,7 +25,7 @@ export default class PinInput extends Component<void,P,S> {
         this.props.placeholder = props.placeholder || props.placeHolder || '_';
         this.pinLength = this.props.pinLength || 4;
         this.state = {
-            pins: Array.from((this.props.placeholder || '_').repeat(this.pinLength))
+            pins: Array(this.pinLength).fill(null)
         };
         let value = this.props.value;
         if (value) {
@@ -44,7 +45,8 @@ export default class PinInput extends Component<void,P,S> {
             if (pin.length !== this.pinLength) {
                 throw new Error(`pin length is not equal ${this.pinLength}`)
             }
-            this.setState({pins: Array.from(pin)});
+            let p = (this.props.placeholder || ' ');
+            this.setState({pins: Array.from(pin).map(v => v && v !== p ? v : null)});
             if (this.props.autoFocus) {
                 this.focusPin(this.pinLength - 1)
             }
@@ -59,7 +61,7 @@ export default class PinInput extends Component<void,P,S> {
         for (let i = 0; i < this.pinLength; i++) {
             this.blurPin(i)
         }
-        let pins = Array.from((this.props.placeholder || '_').repeat(this.pinLength));
+        let pins = Array(this.pinLength).fill(null);
         this.setState({pins: Immutable.List(pins).toArray()});
         if (this.props.autoFocus) {
             this.setState({pins: Immutable.List(pins).set(0, '').toArray()});
@@ -68,16 +70,22 @@ export default class PinInput extends Component<void,P,S> {
     }
 
     async onPinItemChanged(i, t) {
-        await this.setState({pins: Immutable.List(this.state.pins).set(i, t).toArray()});
-        let placeholder = this.props.placeholder || '_';
-        if (!t || t === placeholder) {
+        let pins = Immutable.List(this.state.pins).set(i, t).toArray();
+        await this.setStateAsync({pins: pins});
+        if (!t) {
             return
         }
         if (i + 1 < this.pinLength) {
             this.focusPin(i + 1);
         } else {
             //end
-            if (this.props.onPinCompleted) this.props.onPinCompleted(this.state.pins.join(''));
+            if (this.props.onPinCompleted) {
+                let pinText = this.state.pins.map(v => {
+                    let p = this.props.placeholder || ' ';
+                    return v && v !== p ? v : p;
+                }).join('');
+                this.props.onPinCompleted(pinText);
+            }
         }
     }
 
@@ -110,14 +118,13 @@ export default class PinInput extends Component<void,P,S> {
                                     textAlign: 'center',
                                     ...this.props.pinItemStyle
                                 }}
+                                placeholder={this.props.placeholder || '_'}
                                 enablesReturnKeyAutomatically={true}
                                 keyboardType={(this.props.pinItemProps||{}).keyboardType || 'default'}
                                 returnKeyType={(this.props.pinItemProps || {}).returnKeyType || 'default'}
-                                secureTextEntry={(v !== (this.props.placeholder || '_') && (this.props.pinItemProps || {}).secureTextEntry ) || false}
-                                // clearTextOnFocus={true}
+                                secureTextEntry={(v && (this.props.pinItemProps || {}).secureTextEntry ) || false}
                                 maxLength={1}
-                                onFocus={(e) => this.onPinFocus(i)}
-                                onBlur={async (e) => await this.onPinBlur(e, i)}
+                                onFocus={async (e) => await this.onPinFocus(i)}
                                 onChangeText={async (t) => {
                                     await this.onPinItemChanged(i, t);
                                 }}
@@ -131,25 +138,18 @@ export default class PinInput extends Component<void,P,S> {
 
     }
 
-    onPinFocus(i) {
-        this.setState({pins: Immutable.List(this.state.pins).set(i, '').toArray()})
-    }
-
-    async onPinBlur(e, i) {
-        let value = e.nativeEvent.text;
-        let placeholder = this.props.placeholder || '_';
-        if (!value && value !== placeholder) {
-            await this.setState({pins: Immutable.List(this.state.pins).set(i, placeholder).toArray()})
-        }
+    async onPinFocus(i) {
+        await this.setStateAsync({pins: Immutable.List(this.state.pins).set(i, null).toArray()})
     }
 
     onPinKeyPress(e, i) {
         let key = e.nativeEvent.key;
         if (key === 'Backspace') {
-            let pin = this.state.pins[i];
-            if (pin === '') {
                 this.focusPin(Math.max(i - 1, 0))
-            }
         }
+    }
+
+    async setStateAsync(partialState) {
+        return await new Promise(resolve => this.setState(partialState, () => resolve()))
     }
 }
