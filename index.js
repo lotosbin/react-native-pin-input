@@ -90,7 +90,7 @@ export default class PinInput extends Component<void,P,S> {
         let pins = Array(this.pinLength).fill(null);
         this.setState({pins: Immutable.List(pins).toArray()});
         if (this.props.autoFocus) {
-            this.setState({pins: Immutable.List(pins).set(0, '').toArray()});
+            this.setState({pins: Immutable.List(pins).set(0, null).toArray()});
             this.focusPin(0)
         }
     }
