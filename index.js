@@ -9,7 +9,8 @@ type P ={
     placeholder?: string,
     autoFocus: boolean,
     value?: string,
-    onPinCompleted: (string, Array<string>) => void,
+    onPinCompleted: (string) => void,
+    onPinsCompleted: (Array<string>) => void,
 }
 type S={
 
@@ -40,6 +41,10 @@ export default class PinInput extends Component<void,P,S> {
     componentWillReceiveProps(props) {
         this.props.autoFocus = props.autoFocus || true;
     }
+
+    /**
+     * @deprecated use setPins
+     * */
     setPin(pin: string) {
         if (pin) {
             if (pin.length !== this.pinLength) {
@@ -53,6 +58,20 @@ export default class PinInput extends Component<void,P,S> {
         }
     }
 
+    setPins(pins: Array<string>) {
+        pins = pins || Array(this.pinLength).fill(null);
+        if (pins.length !== this.pinLength) {
+            throw new Error(`pin length is not equal ${this.pinLength}`)
+        }
+        this.setState({pins: pins});
+        if (this.props.autoFocus) {
+            this.focusPin(this.pinLength - 1)
+        }
+    }
+
+    /**
+     * @deprecated use getPins
+     * */
     getPin(): string {
         let pinText = this.state.pins.map(v => {
             let p = this.props.placeholder || ' ';
@@ -61,6 +80,9 @@ export default class PinInput extends Component<void,P,S> {
         return pinText;
     }
 
+    getPins(): Array<string> {
+        return this.state.pins;
+    }
     clearPin() {
         for (let i = 0; i < this.pinLength; i++) {
             this.blurPin(i)
@@ -80,13 +102,15 @@ export default class PinInput extends Component<void,P,S> {
             return
         }
         if (this.isCompleted()) {
-            //end
             if (this.props.onPinCompleted) {
                 let pinText = this.state.pins.map(v => {
                     let p = this.props.placeholder || ' ';
                     return v && v !== p ? v : p;
                 }).join('');
                 this.props.onPinCompleted(pinText);
+            }
+            if (this.props.onPinsCompleted) {
+                this.props.onPinsCompleted(this.state.pins)
             }
             return
         }
