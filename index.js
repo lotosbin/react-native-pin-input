@@ -75,9 +75,7 @@ export default class PinInput extends Component<void,P,S> {
         if (!t) {
             return
         }
-        if (i + 1 < this.pinLength) {
-            this.focusPin(i + 1);
-        } else {
+        if (this.isCompleted()) {
             //end
             if (this.props.onPinCompleted) {
                 let pinText = this.state.pins.map(v => {
@@ -86,7 +84,15 @@ export default class PinInput extends Component<void,P,S> {
                 }).join('');
                 this.props.onPinCompleted(pinText);
             }
+            return
         }
+        if (i + 1 < this.pinLength) {
+            this.focusPin(i + 1);
+        }
+    }
+
+    isCompleted() {
+        return this.state.pins.filter(e => !e).length === 0;
     }
 
     focusPin(i) {
