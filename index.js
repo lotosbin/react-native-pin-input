@@ -2,7 +2,7 @@
  * @flow
  * */
 import React, {Component} from 'react';
-import {View, TextInput} from 'react-native';
+import {View, StyleSheet, TextInput} from 'react-native';
 import Immutable from 'immutable';
 type P ={
     keyboardType?: string,
@@ -142,16 +142,7 @@ export default class PinInput extends Component<void,P,S> {
                                 key={"pin_" + i}
                                 ref={`pin_${i}`}
                                 autoFocus={this.props.autoFocus && i === 0}
-                                style={{
-                                    padding: 2,
-                                    margin: 2,
-                                    borderColor: 'gray',
-                                    borderWidth: 1,
-                                    width: 30,
-                                    height: 30,
-                                    textAlign: 'center',
-                                    ...this.props.pinItemStyle
-                                }}
+                                style={StyleSheet.flatten([styles.pinItem, this.props.pinItemStyle])}
                                 placeholder={this.props.placeholder || '_'}
                                 enablesReturnKeyAutomatically={true}
                                 keyboardType={(this.props.pinItemProps||{}).keyboardType || 'default'}
@@ -187,3 +178,14 @@ export default class PinInput extends Component<void,P,S> {
         return await new Promise(resolve => this.setState(partialState, () => resolve()))
     }
 }
+const styles = StyleSheet.create({
+    pinItem: {
+        padding: 2,
+        margin: 2,
+        borderColor: 'gray',
+        borderWidth: 1,
+        width: 30,
+        height: 30,
+        textAlign: 'center',
+    }
+});
