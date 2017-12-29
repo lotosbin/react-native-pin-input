@@ -10,6 +10,7 @@ type P ={
     autoFocus: boolean,
     value?: string,
     onPinCompleted: (string) => void,
+    onPinEntered: (string) => void,
     onPinsCompleted: (Array<string>) => void,
 }
 type S={
@@ -18,6 +19,7 @@ type S={
 export default class PinInput extends Component<void,P,S> {
     pinItemStyle: any;
     onPinCompleted: Function;
+    onPinEntered: Function;
     pinItemProps: {};
 
     constructor(props) {
@@ -101,12 +103,15 @@ export default class PinInput extends Component<void,P,S> {
         if (!t) {
             return
         }
+        let pinText = this.state.pins.map(v => {
+            let p = this.props.placeholder || ' ';
+            return v && v !== p ? v : p;
+        }).join('');
+        if (this.props.onPinEntered) {
+            this.props.onPinEntered(pinText);
+        }
         if (this.isCompleted()) {
             if (this.props.onPinCompleted) {
-                let pinText = this.state.pins.map(v => {
-                    let p = this.props.placeholder || ' ';
-                    return v && v !== p ? v : p;
-                }).join('');
                 this.props.onPinCompleted(pinText);
             }
             if (this.props.onPinsCompleted) {
@@ -134,7 +139,7 @@ export default class PinInput extends Component<void,P,S> {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
                 {
                     this.state.pins.map((v, i) => {
                         return (
@@ -179,7 +184,6 @@ export default class PinInput extends Component<void,P,S> {
     }
 }
 const styles = StyleSheet.create({
-    container: {flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'},
     pinItem: {
         padding: 2,
         margin: 2,
