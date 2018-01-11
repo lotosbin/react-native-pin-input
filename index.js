@@ -11,6 +11,7 @@ type P ={
     value?: string,
     onPinCompleted: (string) => void,
     onPinEntered: (string) => void,
+    onPinKeyPress: ({}, number) => void,
     onPinsCompleted: (Array<string>) => void,
 }
 type S={
@@ -176,6 +177,9 @@ export default class PinInput extends Component<void,P,S> {
         let key = e.nativeEvent.key;
         if (key === 'Backspace') {
                 this.focusPin(Math.max(i - 1, 0))
+        }
+        if (this.props.onPinKeyPress) {
+            this.props.onPinKeyPress(e, i);
         }
     }
 
