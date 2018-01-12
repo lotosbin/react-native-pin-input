@@ -140,7 +140,7 @@ export default class PinInput extends Component<void,P,S> {
 
     render() {
         return (
-            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+            <View style={styles.container}>
                 {
                     this.state.pins.map((v, i) => {
                         return (
@@ -188,6 +188,7 @@ export default class PinInput extends Component<void,P,S> {
     }
 }
 const styles = StyleSheet.create({
+    container: {flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'},
     pinItem: {
         padding: 2,
         margin: 2,
