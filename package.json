@@ -1,6 +1,6 @@
 {
   "name": "react-native-pin-input",
-  "version": "1.2.10",
+  "version": "1.3.0",
   "description": "react native pin input",
   "main": "index.js",
   "scripts": {

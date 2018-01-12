@@ -10,6 +10,7 @@ type P ={
     autoFocus: boolean,
     value?: string,
     onPinCompleted: (string) => void,
+    onPinEntered: (string) => void,
     onPinKeyPress: ({}, number) => void,
     onPinsCompleted: (Array<string>) => void,
 }
@@ -19,6 +20,7 @@ type S={
 export default class PinInput extends Component<void,P,S> {
     pinItemStyle: any;
     onPinCompleted: Function;
+    onPinEntered: Function;
     pinItemProps: {};
 
     constructor(props) {
@@ -102,12 +104,15 @@ export default class PinInput extends Component<void,P,S> {
         if (!t) {
             return
         }
+        let pinText = this.state.pins.map(v => {
+            let p = this.props.placeholder || ' ';
+            return v && v !== p ? v : p;
+        }).join('');
+        if (this.props.onPinEntered) {
+            this.props.onPinEntered(pinText);
+        }
         if (this.isCompleted()) {
             if (this.props.onPinCompleted) {
-                let pinText = this.state.pins.map(v => {
-                    let p = this.props.placeholder || ' ';
-                    return v && v !== p ? v : p;
-                }).join('');
                 this.props.onPinCompleted(pinText);
             }
             if (this.props.onPinsCompleted) {
