@@ -140,7 +140,7 @@ export default class PinInput extends Component<void,P,S> {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={StyleSheet.flatten([styles.container, this.props.style])}>
                 {
                     this.state.pins.map((v, i) => {
                         return (
