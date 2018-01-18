@@ -154,6 +154,7 @@ export default class PinInput extends Component<void,P,S> {
                                 keyboardType={(this.props.pinItemProps||{}).keyboardType || 'default'}
                                 returnKeyType={(this.props.pinItemProps || {}).returnKeyType || 'default'}
                                 secureTextEntry={(v && (this.props.pinItemProps || {}).secureTextEntry ) || false}
+                                underlineColorAndroid={(this.props.pinItemProps || {}).underlineColorAndroid || undefined}
                                 maxLength={1}
                                 onFocus={async (e) => await this.onPinFocus(i)}
                                 onChangeText={async (t) => {
